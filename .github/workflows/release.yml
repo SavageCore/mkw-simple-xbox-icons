@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Create zip
+        run: cd "mod/Simple Xbox Icons" && zip -r "../../Simple-Xbox-Icons-MKW.zip" romfs/
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Simple-Xbox-Icons-MKW.zip
+          body: |
+            ## Installation
+
+            ### For [Eglantine](https://github.com/Djihads80/Eglantine) Emulator
+            1. Download `Simple-Xbox-Icons-MKW.zip` below
+            2. Right-click the game → **Open Mod Data Location** (load dir for `0400C3F00006E000`)
+            3. Extract the ZIP so the structure is `Simple Xbox Icons/romfs/Font/...`
+            4. Enable the mod and launch the game
+
+            The final folder structure should be:
+            ```
+            load/0400C3F00006E000/Simple Xbox Icons/romfs/Font/PicFont_00.Nin_Ounce_NVN2.bffnt.zs
+            ```
+
+            <!-- ## Changelog
+            -  -->
+          draft: false
+          prerelease: false
